@@ -9,13 +9,6 @@ typedef struct MemoryAddress
 } MemoryAddress;
 
 
-typedef struct Page
-{
-    MemoryAddress memory_address[4];
-
-} Page;
-
-
 void read(int virtual_addr):
 void write(int virtual_address, int num);
 void showmain(int ppn);
@@ -32,8 +25,8 @@ typedef struct PageEntry
 
 int main() {
 
-    Page main_memory[4];
-    Page virtual_memory [8];
+    MemoryAddress main_memory[16];
+    MemoryAddress virtual_memory [32];
     PageEntry virtual_page_table[8];
     char input[200];
     char command[100];
