@@ -9,7 +9,7 @@ typedef struct MemoryAddress
 } MemoryAddress;
 
 
-void read(int virtual_addr):
+void read(int virtual_addr);
 void write(int virtual_address, int num);
 void showmain(int ppn);
 void showdisk(int dpn);
@@ -33,15 +33,30 @@ int main() {
     char first_arg[100];
     char second_arg[100];
 
+    //Initializing main memory
+    int i = 0;
 
-    //Initializing page table
+    for(i = 0; i < 16; i ++)
+    {
+        main_memory->location = -1;
+    }
+
+    //Initializing virtual memory
     int j = 0;
 
-    for(j = 0; j < 8; j++)
+    for (j = 0; j < 32; j++)
     {
-        virtual_page_table[j].valid = 0;
-        virtual_page_table[j].dirty = 0;
-        virtual_page_table[j].page_num = j;
+        virtual_memory->location = -1;
+    }
+
+    //Initializing page table
+    int k = 0;
+
+    for(k = 0; k < 8; k++)
+    {
+        virtual_page_table[k].valid = 0;
+        virtual_page_table[k].dirty = 0;
+        virtual_page_table[k].page_num = k;
     }
 
     while(1)
@@ -71,6 +86,13 @@ int main() {
 
         if(strcmp(command, "showptable") == 0)
         {
+            int i = 0;
+
+            for(i = 0; i < 8; i++)
+            {
+                printf("%d:%d:%d:%d\n", i, virtual_page_table[i].valid, \
+                virtual_page_table[i].dirty, virtual_page_table[i].page_num);
+            }
         }
 
         else if(strcmp(command, "quit") == 0)
