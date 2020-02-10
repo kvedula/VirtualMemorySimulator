@@ -24,8 +24,8 @@ typedef struct PageEntry
 
 } PageEntry;
 
-int main() {
-
+int main()
+{
     MemoryAddress main_memory[16];
     MemoryAddress virtual_memory[32];
     PageEntry virtual_page_table[8];
@@ -33,10 +33,15 @@ int main() {
     char command[100];
     int first_arg;
     int second_arg;
+    int available_pages[8];
+
+    int i;
+    for(i = 0; i < 8; i++)
+    {
+        available_pages[i] = 0;
+    }
 
     //Initializing main memory
-    int i = 0;
-
     for(i = 0; i < 16; i ++)
     {
         main_memory[i].location = -1;
@@ -85,30 +90,111 @@ int main() {
         {
             virtual_memory[first_arg].location = second_arg;
             int virtual_page_number = first_arg/4;
-            int main_page_number = first_arg >> 1;
+            int offset = first_arg % 4;
 
             //Check page table
-            if (virtual_page_table[virtual_page_number].valid == 0)
+            if(virtual_page_table[virtual_page_number].valid == 0)
             {
+                //Find first available page
+                int i;
+                int first_avail_page = 0;
+
+                for(i = 0; i < 8; i++)
+                {
+                    if(available_pages[i] == 0)
+                    {
+                        first_avail_page = i;
+                        available_pages[i] = 1;
+                        break;
+                    }
+                }
+
                 virtual_page_table[virtual_page_number].valid = 1;
                 virtual_page_table[virtual_page_number].dirty = 1;
-                virtual_page_table[virtual_page_number].page_num = main_page_number;
+                virtual_page_table[virtual_page_number].page_num = first_avail_page;
+
+                main_memory[first_avail_page + offset].location = second_arg;
             }
 
-            printf("%d\n", virtual_page_number);
+            else if(virtual_page_table[virtual_page_number].valid == 1)
+            {
+                
+            }
         }
 
         else if(strcmp(command, "showmain") == 0)
         {
             int i;
+
             switch(first_arg)
             {
-                int i;
+                // 0-3
                 case 0:
                     for(i = 0; i < 4; i++)
                     {
                         printf("%d:%d\n", i, main_memory[i].location);
                     }
+                    break;
+
+
+                    // 4-7
+                case 1:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 4, main_memory[i + 4].location);
+                    }
+                    break;
+
+
+                    // 8-11
+                case 2:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 8, main_memory[i + 8].location);
+                    }
+                    break;
+
+                    // 12-15
+                case 3:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 12, main_memory[i + 12].location);
+                        break;
+                    }
+                // 16-19
+                case 4:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 16, main_memory[i + 16].location);
+                    }
+                    break;
+
+
+                    // 20-23
+                case 5:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 20, main_memory[i + 20].location);
+                    }
+                    break;
+
+
+                    // 24-27
+                case 6:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 24, main_memory[i + 24].location);
+                    }
+                    break;
+
+
+                    //28-31
+                case 7:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i + 28, main_memory[i + 28].location);
+                    }
+                    break;
             }
         }
 
