@@ -84,12 +84,32 @@ int main() {
         else if(strcmp(command, "write") == 0)
         {
             virtual_memory[first_arg].location = second_arg;
-            
+            int virtual_page_number = first_arg/4;
+            int main_page_number = first_arg >> 1;
+
+            //Check page table
+            if (virtual_page_table[virtual_page_number].valid == 0)
+            {
+                virtual_page_table[virtual_page_number].valid = 1;
+                virtual_page_table[virtual_page_number].dirty = 1;
+                virtual_page_table[virtual_page_number].page_num = main_page_number;
+            }
+
+            printf("%d\n", virtual_page_number);
         }
 
         else if(strcmp(command, "showmain") == 0)
         {
-
+            int i;
+            switch(first_arg)
+            {
+                int i;
+                case 0:
+                    for(i = 0; i < 4; i++)
+                    {
+                        printf("%d:%d\n", i, main_memory[i].location);
+                    }
+            }
         }
 
         if(strcmp(command, "showdisk") == 0)
